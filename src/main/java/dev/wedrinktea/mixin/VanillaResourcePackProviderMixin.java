@@ -1,6 +1,6 @@
 package dev.wedrinktea.mixin;
 
-import dev.wedrinktea.event.LoadEvents;
+import dev.wedrinktea.event.load.LoadEvents;
 import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.resource.ResourcePackProvider;
 import net.minecraft.resource.VanillaDataPackProvider;

@@ -1,6 +1,6 @@
 package dev.wedrinktea.mixin.client;
 
-import dev.wedrinktea.event.LoadEvents;
+import dev.wedrinktea.event.load.LoadEvents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.DefaultClientResourcePackProvider;

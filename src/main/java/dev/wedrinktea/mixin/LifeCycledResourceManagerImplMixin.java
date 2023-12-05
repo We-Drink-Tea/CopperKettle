@@ -1,6 +1,6 @@
 package dev.wedrinktea.mixin;
 
-import dev.wedrinktea.event.LoadEvents;
+import dev.wedrinktea.event.load.LoadEvents;
 import net.minecraft.resource.LifecycledResourceManager;
 import net.minecraft.resource.LifecycledResourceManagerImpl;
 import net.minecraft.resource.ResourcePack;

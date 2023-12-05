@@ -1,4 +1,4 @@
-package dev.wedrinktea.event
+package dev.wedrinktea.event.load
 
 import net.fabricmc.fabric.api.event.Event
 import net.fabricmc.fabric.api.event.EventFactory
