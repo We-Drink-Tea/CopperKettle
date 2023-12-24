@@ -20,7 +20,7 @@ abstract class DynamicPackBase(
     init {
         FabricLoader.getInstance().getModContainer(id.namespace).ifPresent { container ->
             container.metadata.getIconPath(512).flatMap(container::findPath).ifPresent { iconPath ->
-                addIcon(Files.readAllBytes(iconPath))
+                changeIcon(Files.readAllBytes(iconPath))
             }
         }
     }
@@ -40,7 +40,7 @@ abstract class DynamicPackBase(
     val description: Text get() = _description
     val pinned: Boolean get() = _pinned
 
-    fun addIcon(image: ByteArray) {
+    fun changeIcon(image: ByteArray) {
         rootResources["pack.png"] = image
     }
 
@@ -85,34 +85,30 @@ abstract class DynamicPackBase(
         return id.path
     }
 
-    companion object {
-        fun createProfile(dynamicPack: DynamicPackBase): ResourcePackProfile {
-            return ResourcePackProfile.of(
-                dynamicPack.id.path,
-                dynamicPack.title,
-                dynamicPack.alwaysEnabled,
-                object : ResourcePackProfile.PackFactory {
-                    override fun open(name: String?): ResourcePack {
-                        return dynamicPack
-                    }
+    val profile: ResourcePackProfile = ResourcePackProfile.of(
+        id.path,
+        title,
+        alwaysEnabled,
+        object : ResourcePackProfile.PackFactory {
+            override fun open(name: String?): ResourcePack {
+                return this@DynamicPackBase
+            }
 
-                    override fun openWithOverlays(
-                        name: String?,
-                        metadata: ResourcePackProfile.Metadata?
-                    ): ResourcePack {
-                        return dynamicPack
-                    }
-                },
-                ResourcePackProfile.Metadata(
-                    dynamicPack.description,
-                    ResourcePackCompatibility.COMPATIBLE,
-                    FeatureSet.empty(),
-                    listOf()
-                ),
-                ResourcePackProfile.InsertionPosition.TOP,
-                dynamicPack.pinned,
-                ResourcePackSource.BUILTIN
-            )
-        }
-    }
+            override fun openWithOverlays(
+                name: String?,
+                metadata: ResourcePackProfile.Metadata?
+            ): ResourcePack {
+                return this@DynamicPackBase
+            }
+        },
+        ResourcePackProfile.Metadata(
+            description,
+            ResourcePackCompatibility.COMPATIBLE,
+            FeatureSet.empty(),
+            listOf()
+        ),
+        ResourcePackProfile.InsertionPosition.TOP,
+        pinned,
+        ResourcePackSource.BUILTIN
+    )
 }

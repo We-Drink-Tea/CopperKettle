@@ -1,6 +1,7 @@
 package dev.wedrinktea.resource
 
 import dev.wedrinktea.event.load.LoadEvents
+import kotlinx.serialization.json.JsonObject
 import net.minecraft.resource.ResourcePack
 import net.minecraft.resource.ResourceType
 import net.minecraft.text.Text
@@ -16,7 +17,7 @@ class DynamicResourcePack(
 ) : DynamicPackBase(id, title, alwaysEnabled, description, pinned) {
     init {
         LoadEvents.LOAD_CLIENT_RESOURCES.register { packs ->
-            packs.accept(createProfile(this))
+            packs.accept(profile)
         }
     }
 
@@ -36,11 +37,15 @@ class DynamicResourcePack(
         }
     }
 
-    fun addItemTexture(name: String, data: ByteArray) {
-        resources[id] = data
+    fun addTexture(name: String, data: ByteArray, path: String) {
+        val fileName = if (name.endsWith(".png")) name else "$name.png"
+
+        resources[Identifier(id.namespace, "$path$fileName")] = data
     }
 
-    fun addBlockTexture(name: String, data: ByteArray) {
-        resources[id] = data
+    fun addJson(name: String, json: JsonObject, path: String) {
+        val fileName = if (name.endsWith(".json")) name else "$name.json"
+
+        resources[Identifier(id.namespace, "$path$fileName")] = json.toString().toByteArray()
     }
 }

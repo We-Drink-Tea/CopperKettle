@@ -1,6 +1,7 @@
 package dev.wedrinktea.resource
 
 import dev.wedrinktea.event.load.LoadEvents
+import kotlinx.serialization.json.JsonObject
 import net.minecraft.resource.ResourcePack
 import net.minecraft.resource.ResourceType
 import net.minecraft.text.Text
@@ -15,8 +16,8 @@ class DynamicDataPack(
     pinned: Boolean = false
 ): DynamicPackBase(id, title, alwaysEnabled, description, pinned) {
     init {
-        LoadEvents.LOAD_SERVER_RESOURCES.register {
-            packs -> packs.accept(createProfile(this))
+        LoadEvents.LOAD_SERVER_RESOURCES.register { packs ->
+            packs.accept(profile)
         }
     }
 
@@ -34,5 +35,11 @@ class DynamicDataPack(
                     consumer.accept(id) { ByteArrayInputStream(data) }
                 }
         }
+    }
+
+    fun addJson(name: String, json: JsonObject, path: String) {
+        val fileName = if (name.endsWith(".json")) name else "$name.json"
+
+        resources[Identifier(id.namespace, "$path$fileName")] = json.toString().toByteArray()
     }
 }
