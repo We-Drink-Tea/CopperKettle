@@ -1,5 +1,6 @@
 package dev.wedrinktea.resource
 
+import dev.wedrinktea.CopperKettle
 import dev.wedrinktea.event.load.LoadEvents
 import kotlinx.serialization.json.JsonObject
 import net.minecraft.resource.ResourcePack
@@ -18,6 +19,8 @@ class DynamicResourcePack(
     init {
         LoadEvents.LOAD_CLIENT_RESOURCES.register { packs ->
             packs.accept(profile)
+
+            CopperKettle.LOGGER.info("Registered dynamic resource pack ${id.path}")
         }
     }
 
