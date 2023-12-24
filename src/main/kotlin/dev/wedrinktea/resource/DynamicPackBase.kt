@@ -17,6 +17,15 @@ abstract class DynamicPackBase(
     description: Text,
     pinned: Boolean
 ) : ResourcePack {
+    private val _id = id
+    private val _title = title
+    private val _alwaysEnabled = alwaysEnabled
+    private val _description = description
+    private val _pinned = pinned
+
+    protected val resources = mutableMapOf<Identifier, ByteArray>()
+    private val rootResources = mutableMapOf<String, ByteArray>()
+
     init {
         FabricLoader.getInstance().getModContainer(id.namespace).ifPresent { container ->
             container.metadata.getIconPath(512).flatMap(container::findPath).ifPresent { iconPath ->
@@ -24,15 +33,6 @@ abstract class DynamicPackBase(
             }
         }
     }
-
-    protected val resources = mutableMapOf<Identifier, ByteArray>()
-    private val rootResources = mutableMapOf<String, ByteArray>()
-
-    private val _id = id
-    private val _title = title
-    private val _alwaysEnabled = alwaysEnabled
-    private val _description = description
-    private val _pinned = pinned
 
     val id: Identifier get() = _id
     val title: Text get() = _title
@@ -44,8 +44,8 @@ abstract class DynamicPackBase(
         rootResources["pack.png"] = image
     }
 
-    fun addResource(id: Identifier, data: ByteArray) {
-        resources[id] = data
+    fun addResource(path: String, data: ByteArray) {
+        resources[Identifier(id.namespace, path)] = data
     }
 
     fun addRootResource(name: String, data: ByteArray) {
